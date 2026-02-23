@@ -1,0 +1,92 @@
+
+<div class="page">
+
+ <div class="stark-banner">
+
+  <div class="banner-content">
+    <h1 class="house-title">THE Shops</h1>
+    <p class="motto">“The Page Remembers”</p>
+
+    <div class="divider-sword"></div>
+
+    <p class="welcome">
+      DEAR {{ auth.getUsername() }},
+      oversee your shops below
+    </p>
+  </div>
+
+</div>
+
+  
+  <div class="page-header">
+    <div>
+      <h1>Shops</h1>
+      <p class="subtitle">Manage your store spaces</p>
+    </div>
+
+    <button class="primary-btn" (click)="openAdd()">
+      + New Shop
+    </button>
+  </div>
+
+  <div class="form-panel" *ngIf="showForm">
+
+    <div class="form-grid">
+      <input type="text"
+             [(ngModel)]="formData.name"
+             placeholder="Shop Name" />
+
+      <input type="text"
+             [(ngModel)]="formData.description"
+             placeholder="Description" />
+
+      <input type="file"
+             (change)="onFileChange($event)" />
+    </div>
+
+    <div class="form-actions">
+      <button class="primary-btn" (click)="saveShop()">Save</button>
+      <button class="ghost-btn" (click)="cancel()">Cancel</button>
+    </div>
+
+  </div>
+
+  <!-- Shops List -->
+  <div class="list">
+
+    <div class="list-header">
+      <span>Shop</span>
+      <span>Owner</span>
+      <span>Created</span>
+      <span>Actions</span>
+    </div>
+
+    <div class="list-row" *ngFor="let shop of shops">
+
+      <div class="shop-info">
+        <img *ngIf="shop.image"
+             [src]="'http://127.0.0.1:8000' + shop.image" />
+        <div>
+          <h3>{{ shop.name }}</h3>
+          <p>{{ shop.description }}</p>
+        </div>
+      </div>
+
+      <div>#{{ shop.owner }}</div>
+
+      <div>{{ shop.created_at | date:'short' }}</div>
+
+      <div class="actions">
+        <button (click)="goToProducts(shop.id)">Products</button>
+        <button (click)="openEdit(shop)">Edit</button>
+        <button class="danger"
+                (click)="deleteShop(shop.id)">
+          Delete
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,38 @@
+<div class="login-container">
+
+  <div class="glass-card">
+
+    <h1>Create Account</h1>
+
+    <form (ngSubmit)="register()">
+
+      <input
+        type="text"
+        placeholder="Username"
+        [(ngModel)]="username"
+        name="username"
+        required
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+
+      <button class="login-block" type="submit">Sign Up</button>
+       <button>
+      Already have an account?
+
+      <a routerLink="/">Login</a>
+   
+   </button>
+
+    </form>
+
+   
+  </div>
+
+</div>

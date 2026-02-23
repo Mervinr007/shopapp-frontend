@@ -1,0 +1,82 @@
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Products</h1>
+      <p class="subtitle">Manage your shop products</p>
+    </div>
+
+    <button class="primary-btn" (click)="openAdd()">
+      + Add Product
+    </button>
+  </div>
+
+  <!-- Form Section -->
+  <div class="form-panel" *ngIf="showForm">
+
+    <div class="form-grid">
+      <input type="text"
+             [(ngModel)]="formData.name"
+             placeholder="Product Name" />
+
+      <input type="number"
+             [(ngModel)]="formData.price"
+             placeholder="Price" />
+
+      <input type="number"
+             [(ngModel)]="formData.stock"
+             placeholder="Stock" />
+
+      <input type="file"
+             (change)="onFileChange($event)" />
+    </div>
+
+    <div class="form-actions">
+      <button class="primary-btn" (click)="saveProduct()">Save</button>
+      <button class="ghost-btn" (click)="showForm=false">Cancel</button>
+    </div>
+
+  </div>
+
+  <!-- Product List -->
+  <div class="list">
+
+    <div class="list-header">
+      <span>Product</span>
+      <span>Price</span>
+      <span>Stock</span>
+      <span>Actions</span>
+    </div>
+
+    <div class="list-row" *ngFor="let product of products">
+
+      <div class="product-info">
+        <img *ngIf="product.image"
+             [src]="'http://127.0.0.1:8000' + product.image" />
+        <span>{{ product.name }}</span>
+      </div>
+
+      <div>₹ {{ product.price }}</div>
+
+      <div>
+        <span class="stock"
+              [class.low]="product.stock < 5">
+          {{ product.stock }}
+        </span>
+      </div>
+
+      <div class="actions">
+        <button (click)="viewProduct(product)">View</button>
+        <button (click)="openEdit(product)">Edit</button>
+        <button class="danger"
+                (click)="deleteProduct(product.id)">
+          Delete
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
