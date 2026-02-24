@@ -90,32 +90,40 @@ export class Products implements OnInit {
 
   saveProduct() {
 
-    const formData = new FormData();
-    formData.append('name', this.formData.name);
-    formData.append('price', this.formData.price);
-    formData.append('stock', this.formData.stock);
-    formData.append('shop', this.shopId.toString());
+  const token = localStorage.getItem('authToken');
 
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
+  const headers = {
+    Authorization: `Token ${token}`
+  };
 
-    if (this.isEditing && this.editingId) {
-      this.http.put(
-        `${this.baseUrl}/products/${this.editingId}/`,
-        formData
-      ).subscribe(() => {
-        this.loadProducts();
-        this.showForm = false;
-      });
-    } else {
-      this.http.post(
-        `${this.baseUrl}/products/`,
-        formData
-      ).subscribe(() => {
-        this.loadProducts();
-        this.showForm = false;
-      });
-    }
+  const formData = new FormData();
+  formData.append('name', this.formData.name);
+  formData.append('price', this.formData.price);
+  formData.append('stock', this.formData.stock);
+  formData.append('shop', this.shopId.toString());
+
+  if (this.selectedFile) {
+    formData.append('image', this.selectedFile);
   }
+
+  if (this.isEditing && this.editingId) {
+    this.http.put(
+      `${this.baseUrl}/products/${this.editingId}/`,
+      formData,
+      { headers }  
+    ).subscribe(() => {
+      this.loadProducts();
+      this.showForm = false;
+    });
+  } else {
+    this.http.post(
+      `${this.baseUrl}/products/`,
+      formData,
+      { headers }   
+    ).subscribe(() => {
+      this.loadProducts();
+      this.showForm = false;
+    });
+  }
+}
 }

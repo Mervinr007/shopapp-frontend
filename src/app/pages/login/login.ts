@@ -52,7 +52,7 @@ export class Login {
 
   loginWithGoogle() {
     window.location.href =
-      'http://127.0.0.1:8000/accounts/google/login/';
+      'http://localhost:8000/accounts/google/login/';
   }
   
 }
