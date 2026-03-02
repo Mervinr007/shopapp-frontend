@@ -1,6 +1,5 @@
-
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -21,43 +20,30 @@ export class ChangePasswordComponent {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  changePassword() {
+ changePassword() {
 
-    const token = localStorage.getItem('authToken');
+  const body = {
+    old_password: this.old_password,
+    new_password: this.new_password
+  };
 
-    if (!token) {
-      alert('Not authenticated');
-      return;
+  this.http.post(
+    `http://127.0.0.1:8000/api/auth/change_password/`,
+    body
+  ).subscribe({
+    next: () => {
+      alert('Password changed successfully');
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('username');
+
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error(err);
+      alert(err?.error?.error || 'Error changing password');
     }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Token ${token}`
-    });
-
-    const body = {
-      old_password: this.old_password,
-      new_password: this.new_password
-    };
-
-    this.http.post(
-      `${this.baseUrl}/myapp/change-password/`,
-      body,
-      { headers }
-    ).subscribe({
-      next: () => {
-        alert('Password changed successfully');
-
-      
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('username');
-
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Error changing password');
-      }
-    });
-  }
-
+  });
+}
 }

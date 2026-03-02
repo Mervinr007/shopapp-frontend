@@ -1,89 +1,231 @@
 
-<div class="page">
 
- <div class="stark-banner">
+<div *ngIf="currentView === 'list'">
 
-  <div class="banner-content">
-    <h1 class="house-title">THE Shops</h1>
-    <p class="motto">“The Page Remembers”</p>
+  <h1>Your Shops</h1>
 
-    <div class="divider-sword"></div>
+  <div class="shop-card"
+       *ngFor="let shop of shops"
+       (click)="enterShop(shop)">
 
-    <p class="welcome">
-      DEAR {{ auth.getUsername() }},
-      oversee your shops below
-    </p>
+    <img *ngIf="shop.image"
+         [src]="shop.image"
+         class="shop-img" />
+
+    <div class="shop-info">
+      <h3>{{ shop.name }}</h3>
+      <p>{{ shop.address }}</p>
+    </div>
+
   </div>
 
 </div>
 
-  
-  <div class="page-header">
-    <div>
-      <h1>Shops</h1>
-      <p class="subtitle">Manage your store spaces</p>
-    </div>
 
-    <button class="primary-btn" (click)="openAdd()">
-      + New Shop
+
+
+
+<div *ngIf="currentView === 'detail'" class="management-page">
+
+
+  <div class="shop-panel">
+
+    <button class="back-btn"
+            (click)="backToList()">
+      ← Back
     </button>
-  </div>
 
-  <div class="form-panel" *ngIf="showForm">
+    <h2>{{ selectedShop?.name }}</h2>
+    <p>{{ selectedShop?.address }}</p>
 
-    <div class="form-grid">
-      <input type="text"
-             [(ngModel)]="formData.name"
-             placeholder="Shop Name" />
+    <button class="primary-btn"
+            (click)="openAddExistingProduct()">
+      + Add From Catalogue
+    </button>
 
-      <input type="text"
-             [(ngModel)]="formData.description"
-             placeholder="Description" />
-
-      <input type="file"
-             (change)="onFileChange($event)" />
-    </div>
-
-    <div class="form-actions">
-      <button class="primary-btn" (click)="saveShop()">Save</button>
-      <button class="ghost-btn" (click)="cancel()">Cancel</button>
-    </div>
+    <button class="primary-btn"
+            (click)="showAddNewProductModal = true">
+      + Add New Product
+    </button>
 
   </div>
 
-  <!-- Shops List -->
-  <div class="list">
 
-    <div class="list-header">
-      <span>Shop</span>
-      <span>Owner</span>
-      <span>Created</span>
-      <span>Actions</span>
-    </div>
+ 
+  <div class="products-panel">
 
-    <div class="list-row" *ngFor="let shop of shops">
+    <div class="product-card"
+         *ngFor="let item of products">
 
-      <div class="shop-info">
-        <img *ngIf="shop.image"
-             [src]="'http://127.0.0.1:8000' + shop.image" />
+      <div class="product-left">
+
+        <img *ngIf="item.product?.image"
+             [src]="item.product.image" />
+
         <div>
-          <h3>{{ shop.name }}</h3>
-          <p>{{ shop.description }}</p>
+          <h3>{{ item.product?.name }}</h3>
+          <p>MRP: ₹ {{ item.product?.mrp }}</p>
+          <p>Selling: ₹ {{ item.selling_price }}</p>
         </div>
+
       </div>
 
-      <div>#{{ shop.owner }}</div>
+      <div class="product-right">
 
-      <div>{{ shop.created_at | date:'short' }}</div>
+        <div class="stock"
+             [class.low]="item.stock_count < 5">
+          {{ item.stock_count }}
+        </div>
 
-      <div class="actions">
-        <button (click)="goToProducts(shop.id)">Products</button>
-        <button (click)="openEdit(shop)">Edit</button>
-        <button class="danger"
-                (click)="deleteShop(shop.id)">
-          Delete
-        </button>
+        <div class="actions">
+          <button (click)="openEdit(item)">Edit</button>
+          <button class="danger"
+                  (click)="deleteItem(item.id)">
+            Delete
+          </button>
+        </div>
+
       </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+<div class="modal-overlay"
+     *ngIf="showAddExistingProductModal"
+     (click)="showAddExistingProductModal=false">
+
+  <div class="modal-box"
+       (click)="$event.stopPropagation()">
+
+    <h3>Add Product From Catalogue</h3>
+
+    <select [(ngModel)]="selectedCatalogueProductId">
+
+      <option [ngValue]="null">Select Product</option>
+
+      <option *ngFor="let item of catalogueProducts"
+              [ngValue]="item.id">
+        {{ item.name }} - MRP ₹ {{ item.mrp }}
+      </option>
+
+    </select>
+
+   <small *ngIf="selectedCatalogueProductMRP !== null">
+  MRP: ₹ {{ selectedCatalogueProductMRP }}
+</small>
+
+    <input type="number"
+           [(ngModel)]="catalogueSellingPrice"
+           placeholder="Selling Price">
+
+    <input type="number"
+           [(ngModel)]="catalogueStockCount"
+           placeholder="Stock Quantity">
+
+    <div class="modal-actions">
+
+      <button class="primary-btn"
+              (click)="addProductToShop()">
+        Add
+      </button>
+
+      <button class="cancel-btn"
+              (click)="showAddExistingProductModal=false">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+<div class="modal-overlay"
+     *ngIf="showAddNewProductModal"
+     (click)="showAddNewProductModal=false">
+
+  <div class="modal-box"
+       (click)="$event.stopPropagation()">
+
+    <h3>Add New Product</h3>
+
+    <input [(ngModel)]="newProductName"
+           placeholder="Product Name">
+
+    <input type="number"
+           [(ngModel)]="newProductMRP"
+           placeholder="MRP">
+
+    <input [(ngModel)]="newProductWeight"
+           placeholder="Weight">
+
+    <input type="number"
+           [(ngModel)]="newSellingPrice"
+           placeholder="Selling Price">
+
+    <input type="number"
+           [(ngModel)]="newStockCount"
+           placeholder="Stock Quantity">
+
+    <div class="modal-actions">
+
+      <button class="primary-btn"
+              (click)="createNewProduct()">
+        Create
+      </button>
+
+      <button class="cancel-btn"
+              (click)="showAddNewProductModal=false">
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+<div class="modal-overlay"
+     *ngIf="showEditModal"
+     (click)="showEditModal=false">
+
+  <div class="modal-box"
+       (click)="$event.stopPropagation()">
+
+    <h3>Edit Product</h3>
+
+    <input type="number"
+           [(ngModel)]="editSellingPrice"
+           placeholder="Selling Price">
+
+    <input type="number"
+           [(ngModel)]="editStockCount"
+           placeholder="Stock Quantity">
+
+    <div class="modal-actions">
+
+      <button class="primary-btn"
+              (click)="saveEdit()">
+        Save
+      </button>
+
+      <button class="cancel-btn"
+              (click)="showEditModal=false">
+        Cancel
+      </button>
 
     </div>
 

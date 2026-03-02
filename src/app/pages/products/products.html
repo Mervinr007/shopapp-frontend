@@ -1,78 +1,70 @@
-<div class="page">
 
-  <!-- Header -->
-  <div class="page-header">
-    <div>
+<div class="management-page" *ngIf="!loading">
+
+ 
+  <div class="shop-panel">
+
+    <img *ngIf="shop.image"
+         [src]="shop.image"
+         class="shop-image" />
+
+    <h2>{{ shop.name }}</h2>
+
+    <p class="shop-desc">
+      {{ shop.description }}
+    </p>
+
+    <div class="shop-meta">
+      <span><strong>Owner:</strong> {{ shop.owner }}</span>
+      <span><strong>Total Products:</strong> {{ products.length }}</span>
+    </div>
+
+  </div>
+
+
+ 
+  <div class="products-panel">
+
+    <div class="products-header">
       <h1>Products</h1>
-      <p class="subtitle">Manage your shop products</p>
+
+      <button class="primary-btn"
+              (click)="openAdd()"
+              [disabled]="!(shopOwner === currentUser || isAdmin)">
+        + Add Product
+      </button>
     </div>
 
-    <button class="primary-btn" (click)="openAdd()">
-      + Add Product
-    </button>
-  </div>
+   
+    <div class="product-card"
+         *ngFor="let product of products">
 
-  <!-- Form Section -->
-  <div class="form-panel" *ngIf="showForm">
-
-    <div class="form-grid">
-      <input type="text"
-             [(ngModel)]="formData.name"
-             placeholder="Product Name" />
-
-      <input type="number"
-             [(ngModel)]="formData.price"
-             placeholder="Price" />
-
-      <input type="number"
-             [(ngModel)]="formData.stock"
-             placeholder="Stock" />
-
-      <input type="file"
-             (change)="onFileChange($event)" />
-    </div>
-
-    <div class="form-actions">
-      <button class="primary-btn" (click)="saveProduct()">Save</button>
-      <button class="ghost-btn" (click)="showForm=false">Cancel</button>
-    </div>
-
-  </div>
-
-  <!-- Product List -->
-  <div class="list">
-
-    <div class="list-header">
-      <span>Product</span>
-      <span>Price</span>
-      <span>Stock</span>
-      <span>Actions</span>
-    </div>
-
-    <div class="list-row" *ngFor="let product of products">
-
-      <div class="product-info">
+      <div class="product-left">
         <img *ngIf="product.image"
-             [src]="'http://127.0.0.1:8000' + product.image" />
-        <span>{{ product.name }}</span>
+             [src]="product.image" />
+
+        <div>
+          <h3>{{ product.name }}</h3>
+          <p>₹ {{ product.price }}</p>
+        </div>
       </div>
 
-      <div>₹ {{ product.price }}</div>
+      <div class="product-right">
 
-      <div>
         <span class="stock"
               [class.low]="product.stock < 5">
           {{ product.stock }}
         </span>
-      </div>
 
-      <div class="actions">
-        <button (click)="viewProduct(product)">View</button>
-        <button (click)="openEdit(product)">Edit</button>
-        <button class="danger"
-                (click)="deleteProduct(product.id)">
-          Delete
-        </button>
+        <div class="actions">
+          <button (click)="openEdit(product)">Edit</button>
+
+          <button class="danger"
+                  (click)="deleteProduct(product.id)">
+            Delete
+          </button>
+        </div>
+
       </div>
 
     </div>

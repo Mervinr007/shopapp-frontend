@@ -21,21 +21,21 @@ export class Signup {
 
   register() {
 
-    const body = {
-      username: this.username,
-      password: this.password
-    };
+  const body = {
+    username: this.username,
+    password: this.password
+  };
 
-    this.http.post('http://127.0.0.1:8000/myapp/register/', body)
-      .subscribe({
-        next: () => {
-          alert("Account created successfully!");
-          this.router.navigate(['/']); 
-        },
-        error: (err) => {
-          console.error(err);
-          alert("Registration failed");
-        }
-      });
-  }
+  this.http.post('http://127.0.0.1:8000/api/auth/register/', body)
+    .subscribe({
+      next: () => {
+        alert("Account created successfully!");
+        this.router.navigate(['/login']); 
+      },
+      error: (err) => {
+        console.error(err);
+        alert("Registration failed");
+      }
+    });
+}
 }

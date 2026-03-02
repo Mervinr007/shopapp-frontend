@@ -1,158 +1,94 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap');
-
 .dashboard-container {
   display: flex;
   height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #111827);
-  color: #cbd5e1;
-  font-family: 'Cinzel', serif;
+  font-family: 'Fredoka', sans-serif;
+  background: linear-gradient(180deg, #ff4a1c, #ff7a00);
 }
 
 
 .sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, #111827, #0f172a);
-  border-right: 2px double rgb(137, 202, 226);
-  padding: 30px 20px;
+  width: 220px; 
+  background: linear-gradient(180deg, #ff3c00, #ff6a00);
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: 0.3s ease;
-  box-shadow: 0 0 35px rgba(56,189,248,0.08);
+  box-shadow: 3px 0 15px rgba(0,0,0,0.15);
+  color: white;
 }
 
 .sidebar.closed {
-  width: 80px;
+  width: 70px;
 }
-
 
 .profile-section {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .avatar {
-  width: 85px;
-  height: 85px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
-  border: 2px solid #38bdf8;
-  box-shadow: 0 0 20px rgba(56,189,248,0.4);
-  margin-bottom: 15px;
+  border: 3px solid white;
+  margin-bottom: 10px;
 }
 
 .profile-section h3 {
-  font-size: 1rem;
-  letter-spacing: 1px;
-  color: #60a5fa;
+  font-size: 0.9rem;
   margin: 0;
 }
 
 .menu-section h4 {
-  font-size: 0.8rem;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 15px;
-}
-
-.menu-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  font-size: 0.7rem;
+  margin-bottom: 10px;
+  opacity: 0.8;
 }
 
 .menu-section li {
-  padding: 12px 12px;
-  border-radius: 10px;
-  gap: 5px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: 0.25s ease;
-  color: #cbd5e1;
-
-  border: 2px dotted #c9d2e0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: 0.2s ease;
 }
 
 .menu-section li:hover {
-  background: #1e293b;
-  box-shadow: 0 0 15px rgba(56,189,248,0.25);
-  transform: translateX(6px);
-  color: #38bdf8;
+  background: rgb(255, 255, 255);
+  color: #ff3c00;
+  transform: translateX(4px);
+  transition: 0.3s ease;
 }
 
 
-.bottom-section button {
-  width: 100%;
-  margin-top: 12px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #1f2937;
-  background: linear-gradient(145deg, #0f172a, #111827);
-  color: #cbd5e1;
-  font-family: 'Cinzel', serif;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.bottom-section button:hover {
-  background: #1e293b;
-  box-shadow: 0 0 15px rgba(56,189,248,0.3);
-  color: #38bdf8;
-}
 
 
-.bottom-section button:last-child {
-  border: 1px solid #7f1d1d;
-  color: #f87171;
-}
 
-.bottom-section button:last-child:hover {
-  background: #7f1d1d;
-  box-shadow: 0 0 12px rgba(220,38,38,0.4);
-  color: white;
-}
+
 
 
 .content {
   flex: 1;
-  padding: 60px 40px 40px 40px;
+  padding: 30px 30px;
   overflow-y: auto;
-  background: linear-gradient(135deg, #111827, #0f172a);
-  position: relative;
+  background: #ffffff;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
+
 
 .toggle-btn {
-  position: sticky;
-  top: -20px;
-
-  left: 0px;
-  left: 0;
-  z-index: 1000;
-
-  background: #111827;
-  border: 1px solid #1f2937;
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: #38bdf8;
+  position: absolute;
+  top: 15px;
+  left: 18px;
+  background: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  color: #ff3c00;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.toggle-btn:hover {
-  background: #1e293b;
-  box-shadow: 0 0 15px rgba(56,189,248,0.3);
-}
-
-
-
-
-
-.menu-section li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
 }
 
 
@@ -162,13 +98,158 @@
   display: none;
 }
 
-
-
 .sidebar.closed .menu-section li {
   justify-content: center;
 }
-
-.sidebar.closed .bottom-section button {
+.bottom-section {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bottom-section button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: white;
+  color: #ff3c00;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bottom-section button:hover {
+  background: #ffe5e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.bottom-section button:last-child {
+  background: #d00000;
+  color: white;
+}
+
+.bottom-section button:last-child:hover {
+  background: #a00000;
+}
+/* Back Button */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+  margin-bottom: 18px;
+
+  background: linear-gradient(145deg, #f3eeed, #ff6a00);
+  color: white;
+
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.back-button .arrow {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  transform: translateX(-4px);
+  background: linear-gradient(145deg, #ec791a, #ffffff);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.back-button:active {
+  transform: scale(0.95);
+}
+
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+  }
+
+  .content {
+    padding: 25px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .dashboard-container {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    width: 70px; 
+    padding: 15px 8px;
+    align-items: center;
+  }
+
+  
+  .sidebar .text,
+  .sidebar h3,
+  .sidebar h4 {
+    display: none;
+  }
+
+
+  .menu-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .menu-section li {
+    justify-content: center;
+    padding: 10px;
+  }
+
+ 
+
+  .content {
+    flex: 1;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+ .toggle-btn {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .content {
+    padding: 15px;
+  }
+  
+}
+@media (max-width: 768px) {
+  .back-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .back-button .text {
+    display: none; /* show only arrow on small screens */
+  }
+
+  .back-button .arrow {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button {
+    margin-bottom: 14px;
+  }
 }

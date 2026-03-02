@@ -1,0 +1,133 @@
+.page {
+  padding: 28px 30px;
+  color: #2d1b00;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.page-header {
+  margin-bottom: 22px;
+}
+
+.page-header h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #ff3c00;
+  margin: 0;
+}
+
+.page div[ng-reflect-ng-if="true"] {
+  font-weight: 500;
+  color: #ff6a00;
+}
+.list {
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.list-header {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
+  padding: 14px 18px;
+  background: linear-gradient(90deg, #ff4a1c, #ff7a00);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.list-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr;
+  padding: 14px 18px;
+  align-items: center;
+  border-bottom: 1px solid #f3f3f3;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.list-row:hover {
+  background: #fff4ef;
+  transform: translateX(4px);
+}
+
+.list-row span.low {
+  color: white;
+  background: #d00000;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.list-row span:not(.low) {
+  background: #ffe5d9;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+}
+
+.list-row div {
+  font-weight: 500;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .list-header,
+  .list-row {
+    grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  }
+
+  .list-header span:nth-child(3),
+  .list-row div:nth-child(3) {
+    display: none; 
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 20px 16px;
+  }
+
+  .list-header {
+    display: none; 
+  }
+
+  .list-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .list-row div {
+    font-size: 0.85rem;
+    
+  }
+
+  .list-row div::before {
+    font-weight: 600;
+    color: #ff3c00;
+    margin-right: 6px;
+  }
+
+  .list-row div{
+    color: #ff3c00;
+  }
+
+  .list-row div:nth-child(1)::before { content: "Product: "; }
+  .list-row div:nth-child(2)::before { content: "Shop: "; }
+  .list-row div:nth-child(3)::before { content: "Owner: "; }
+  .list-row div:nth-child(4)::before { content: "Price: "; }
+  .list-row div:nth-child(5)::before { content: "Stock: "; }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .list-row {
+    padding: 14px;
+  }
+}

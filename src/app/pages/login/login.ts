@@ -27,7 +27,7 @@ export class Login {
   login() {
 
   this.http.post(
-    `${this.baseUrl}/dj-rest-auth/login/`,
+    `${this.baseUrl}/api/token/`,
     {
       username: this.username,
       password: this.password
@@ -37,11 +37,12 @@ export class Login {
 
       console.log("Login success:", res);
 
-      localStorage.setItem('authToken', res.key);
+      localStorage.setItem('accessToken', res.access);
+      localStorage.setItem('refreshToken', res.refresh);
 
       localStorage.setItem('username', this.username);
 
-      this.router.navigate(['/shops']);
+      this.router.navigate(['/home']);
     },
     error: (err) => {
       console.error("Login failed:", err);

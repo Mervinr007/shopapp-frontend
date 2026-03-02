@@ -7,35 +7,64 @@ import { Router } from '@angular/router';
 })
 export class Auth {
 
-  private baseUrl = 'http://127.0.0.1:8000';
-  
+  private baseUrl = 'http://127.0.0.1:8000/api';
+
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
+ 
   loginRequest(data: any) {
-    return this.http.post(this.baseUrl + '/dj-rest-auth/login/', data);
+    return this.http.post(this.baseUrl + '/token/', data);
   }
 
+  
   register(data: any) {
-    return this.http.post(this.baseUrl + '/dj-rest-auth/registration/', data);
+    return this.http.post(this.baseUrl + '/auth/register/', data);
   }
 
-  login(token: string, username: string) {
-    localStorage.setItem('authToken', token);
+  
+  login(access: string, refresh: string, username: string) {
+    localStorage.setItem('accessToken', access);
+    localStorage.setItem('refreshToken', refresh);
     localStorage.setItem('username', username);
   }
 
+
+    refreshToken() {
+  const refresh = localStorage.getItem('refreshToken');
+  return this.http.post<any>(this.baseUrl + '/token/refresh/', {
+    refresh: refresh
+  });
+}
   logout() {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('username');
-    this.router.navigate(['/login']);
+  const refresh = localStorage.getItem('refreshToken');
+
+  if (refresh) {
+    this.http.post(this.baseUrl + '/auth/logout/', {
+      refresh: refresh
+    }).subscribe({
+      next: () => {},
+      error: () => {}
+    });
   }
 
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('username');
+
+  this.router.navigate(['/login']);
+}
+
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!localStorage.getItem('accessToken');
   }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
 
   getUsername(): string {
     return localStorage.getItem('username') || 'User';
