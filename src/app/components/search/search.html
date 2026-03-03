@@ -1,0 +1,88 @@
+<!-- <div class="search-page">
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search products or shops..."
+      [(ngModel)]="query"
+      (input)="onSearchChange()"
+    />
+
+    <div class="dropdown" *ngIf="showDropdown && results.length">
+
+      <div class="dropdown-item"
+           *ngFor="let item of results"
+           (click)="selectItem(item)">
+
+        <span *ngIf="item.type === 'product'">
+          📦 {{ item.name }} ({{ item.weight }})
+        </span>
+
+        <span *ngIf="item.type === 'shop'">
+          🏬 {{ item.name }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div> -->
+
+<div class="search-page">
+
+  <div class="search-container">
+
+   
+    <div class="logo">
+      <!-- <mat-icon class="logo-icon">storefront</mat-icon> -->
+      <h1>Search your Products or Shops</h1>
+    </div>
+
+  
+    <mat-form-field appearance="outline" class="full-width">
+
+      <mat-label>Search products or shops</mat-label>
+
+      <input
+        matInput
+        [(ngModel)]="query"
+        (input)="onSearchChange()"
+        autocomplete="off"
+      >
+
+      <mat-icon matSuffix>search</mat-icon>
+
+    </mat-form-field>
+
+    
+    <mat-card class="results-card"
+              *ngIf="showDropdown && results.length">
+
+      <div
+        class="result-item"
+        *ngFor="let item of results"
+        (click)="selectItem(item)">
+
+        <mat-icon class="result-icon">
+          {{ item.type === 'product' ? 'inventory_2' : 'store' }}
+        </mat-icon>
+
+        <div>
+          <div class="result-name">
+            {{ item.name }}
+          </div>
+
+          <div class="result-type">
+            {{ item.type | uppercase }}
+          </div>
+        </div>
+
+      </div>
+
+    </mat-card>
+
+  </div>
+
+</div>

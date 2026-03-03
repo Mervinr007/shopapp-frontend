@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './change-password.html',
   styleUrls: ['./change-password.css']
 })
@@ -18,7 +19,9 @@ export class ChangePasswordComponent {
 
   private baseUrl = 'http://127.0.0.1:8000';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
  changePassword() {
 
@@ -31,19 +34,43 @@ export class ChangePasswordComponent {
     `http://127.0.0.1:8000/api/auth/change_password/`,
     body
   ).subscribe({
+
     next: () => {
-      alert('Password changed successfully');
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('username');
+      this.snackBar.open(
+        'Password changed successfully',
+        'OK',
+        {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        }
+      );
 
-      this.router.navigate(['/login']);
+      setTimeout(() => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+        this.router.navigate(['/login']);
+      }, 1500);
     },
+
     error: (err) => {
-      console.error(err);
-      alert(err?.error?.error || 'Error changing password');
+
+      this.snackBar.open(
+        err?.error?.error || 'Error changing password',
+        'Close',
+        {
+          duration: 4000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        }
+      );
+
     }
+
   });
 }
 }

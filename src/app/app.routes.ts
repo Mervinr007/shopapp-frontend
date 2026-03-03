@@ -7,7 +7,8 @@ import { ChangePasswordComponent } from './pages/change-password/change-password
 import { Signup } from './pages/signup/signup';
 import { authGuard } from './guard/auth.guard';
 import { Products } from './components/products/products';
-
+import { ProductDetail } from './components/product-detail/product-detail';
+import { Search } from './components/search/search';
 export const routes: Routes = [
 
  
@@ -25,18 +26,12 @@ export const routes: Routes = [
       { path: 'home', component: Home },
       { path: 'shops', component: Shops },
       { path: 'products', component: Products },
-
-      {
-        path: 'all-products',
-        loadComponent: () =>
-          import('./components/allproducts/allproducts')
-            .then(m => m.AllProducts),
-      },
-
+      { path: 'product-detail/:id', component: ProductDetail },
+      { path: 'search', component: Search },
       {
         path: 'products/:id',
         loadComponent: () =>
-          import('./pages/products/products')
+          import('./components/products/products')
             .then(m => m.Products),
       },
 

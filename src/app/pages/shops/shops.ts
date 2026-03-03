@@ -4,11 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ShopService } from '../../services/shop';
 import { Auth } from '../../services/auth';
-
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDeleteDialog } from '../../components/confirmdelete/confirmdelete';
 @Component({
   selector: 'app-shops',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule, MatDialogModule],
   templateUrl: './shops.html',
   styleUrls: ['./shops.css']
 })
@@ -46,7 +51,10 @@ export class Shops implements OnInit {
     private shopService: ShopService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
-    public auth: Auth
+    public auth: Auth,
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -102,12 +110,22 @@ export class Shops implements OnInit {
       });
   }
 
-  addProductToShop() {
+addProductToShop() {
 
   if (!this.selectedCatalogueProductId ||
       this.catalogueSellingPrice === null ||
       this.catalogueStockCount === null) {
-    alert("Fill all fields");
+
+    this.snackBar.open(
+      'Please fill all fields',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
@@ -116,13 +134,33 @@ export class Shops implements OnInit {
   );
 
   if (this.catalogueSellingPrice > selectedProduct.mrp) {
-    alert("Selling price cannot exceed MRP");
+
+    this.snackBar.open(
+      'Selling price cannot exceed MRP',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
   if (this.catalogueSellingPrice <= 0 ||
       this.catalogueStockCount < 0) {
-    alert("Values must be positive");
+
+    this.snackBar.open(
+      'Values must be positive',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
@@ -131,15 +169,42 @@ export class Shops implements OnInit {
     product_id: this.selectedCatalogueProductId,
     selling_price: this.catalogueSellingPrice,
     stock_count: this.catalogueStockCount
-  }).subscribe(() => {
+  }).subscribe({
+    next: () => {
 
-    this.showAddExistingProductModal = false;
+      this.snackBar.open(
+        'Product added to shop successfully',
+        'OK',
+        {
+          duration: 3000,
+          panelClass: ['success-snackbar'],
+          verticalPosition: 'top',
+          horizontalPosition: 'right'
+        }
+      );
 
-    this.selectedCatalogueProductId = null;
-    this.catalogueSellingPrice = null;
-    this.catalogueStockCount = null;
+      this.showAddExistingProductModal = false;
 
-    this.loadProducts(this.selectedShop.id);
+      this.selectedCatalogueProductId = null;
+      this.catalogueSellingPrice = null;
+      this.catalogueStockCount = null;
+
+      this.loadProducts(this.selectedShop.id);
+    },
+    error: () => {
+
+      this.snackBar.open(
+        'Error adding product to shop',
+        'Close',
+        {
+          duration: 4000,
+          panelClass: ['error-snackbar'],
+          verticalPosition: 'top',
+          horizontalPosition: 'right'
+        }
+      );
+
+    }
   });
 }
 get selectedCatalogueProductMRP(): number | null {
@@ -156,33 +221,118 @@ get selectedCatalogueProductMRP(): number | null {
 
   createNewProduct() {
 
-    if (!this.newProductName ||
-        this.newProductMRP === null ||
-        this.newSellingPrice === null ||
-        this.newStockCount === null) {
-      alert("Fill all fields");
-      return;
-    }
+  if (!this.newProductName ||
+      this.newProductMRP === null ||
+      this.newSellingPrice === null ||
+      this.newStockCount === null) {
 
-    this.http.post(`${this.baseUrl}/products/`, {
-      name: this.newProductName,
-      mrp: this.newProductMRP,
-      weight: this.newProductWeight
-    }).subscribe((product: any) => {
+    this.snackBar.open(
+      'Please fill all fields',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
+    return;
+  }
+
+  if (this.newSellingPrice > this.newProductMRP) {
+
+    this.snackBar.open(
+      'Selling price cannot exceed MRP',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
+    return;
+  }
+
+  if (this.newSellingPrice <= 0 ||
+      this.newProductMRP <= 0 ||
+      this.newStockCount < 0) {
+
+    this.snackBar.open(
+      'Values must be positive',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
+    return;
+  }
+
+  this.http.post(`${this.baseUrl}/products/`, {
+    name: this.newProductName,
+    mrp: this.newProductMRP,
+    weight: this.newProductWeight
+  }).subscribe({
+    next: (product: any) => {
 
       this.http.post(`${this.baseUrl}/inventory/`, {
         shop: this.selectedShop.id,
         product_id: product.id,
         selling_price: this.newSellingPrice,
         stock_count: this.newStockCount
-      }).subscribe(() => {
+      }).subscribe({
+        next: () => {
 
-        this.showAddNewProductModal = false;
-        this.loadProducts(this.selectedShop.id);
+          this.snackBar.open(
+            'New product created and added successfully',
+            'OK',
+            {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'right'
+            }
+          );
+
+          this.showAddNewProductModal = false;
+          this.loadProducts(this.selectedShop.id);
+        },
+        error: () => {
+
+          this.snackBar.open(
+            'Error adding product to shop',
+            'Close',
+            {
+              duration: 4000,
+              panelClass: ['error-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'right'
+            }
+          );
+
+        }
       });
-    });
-  }
 
+    },
+    error: () => {
+
+      this.snackBar.open(
+        'Error creating product',
+        'Close',
+        {
+          duration: 4000,
+          panelClass: ['error-snackbar'],
+          verticalPosition: 'top',
+          horizontalPosition: 'right'
+        }
+      );
+
+    }
+  });
+}
 
   openEdit(item: any) {
     this.editingItem = item;
@@ -206,13 +356,47 @@ get selectedCatalogueProductMRP(): number | null {
   }
 
 
-  deleteItem(id: number) {
+ deleteItem(id: number) {
 
-    if (!confirm("Delete this product from shop?")) return;
+  const dialogRef = this.dialog.open(ConfirmDeleteDialog);
+
+  dialogRef.afterClosed().subscribe(result => {
+
+    if (!result) return;
 
     this.http.delete(`${this.baseUrl}/inventory/${id}/`)
-      .subscribe(() => {
-        this.loadProducts(this.selectedShop.id);
+      .subscribe({
+        next: () => {
+
+          this.snackBar.open(
+            'Product removed successfully',
+            'OK',
+            {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'right'
+            }
+          );
+
+          this.loadProducts(this.selectedShop.id);
+        },
+        error: () => {
+
+          this.snackBar.open(
+            'Error deleting product',
+            'Close',
+            {
+              duration: 4000,
+              panelClass: ['error-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'right'
+            }
+          );
+
+        }
       });
-  }
+
+  });
+}
 }

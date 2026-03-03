@@ -1,145 +1,126 @@
-.login-container {
 
-  height: 100vh;
+.login-container {
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-background-image: radial-gradient(#e08bcd 1px, transparent 1px);
-background-size: 20px 20px;
-  font-family: 'Trebuchet MS', sans-serif;
-  position: relative;
-  overflow: hidden;
-}
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
 
-.login-container > div,
-.login-container {
-  backdrop-filter: blur(15px);
-}
-
-.login-container {
-  flex-direction: column;
-}
-
-
-.login-container {
-  position: relative;
-}
-
-.login-container h1 {
-  margin-bottom: 30px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-
-.login-container {
-  padding: 40px;
-}
-
-
-.login-container::before {
-  content: '';
-  position: absolute;
-  inset: 18%;
   background: linear-gradient(
     135deg,
-    #e08bcd 0%,
-    #e7f675 40%,
-    #eb9b8f 100%
+    #fff7ed 0%,
+    #fef3c7 40%,
+    #ffffff 100%
   );
-  border-radius: 30px;
-  filter: blur(40px);
-  opacity: 0.6;
-  z-index: -1;
 }
 
 
-input {
-  width: 260px;
-  padding: 12px 15px;
-  margin: 10px 0;
+.glass-card {
+  width: 100%;
+  max-width: 380px;
+  padding: 40px 35px;
+  border-radius: 16px;
+  background: #ffffff;
+  border-top: 5px solid #f97316;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+.glass-card h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+
+.glass-card input {
+  max-width: 90%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.glass-card input::placeholder {
+  color: #9ca3af;
+}
+
+.glass-card input:focus {
+  outline: none;
+  border-color: #f97316;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+
+.glass-card button {
+  width: 100%;
+  padding: 12px;
   border-radius: 10px;
   border: none;
-  outline: none;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-  transition: 0.3s ease;
-}
-
-input:focus {
-  background: white;
-  box-shadow: 0 0 10px rgba(100, 150, 255, 0.4);
-}
-
-
-button {
-  width: 260px;
-  padding: 12px;
-  margin-top: 15px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(
-    135deg,
-    #e08bcd,
-    #eb9b8f
-  );
+  background: #f97316;
   color: white;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: 0.25s ease;
 }
 
-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(235, 155, 143, 0.4);
+.glass-card button:hover {
+  background: #ea580c;
 }
 
 
 .google-btn {
-  background: white;
-  color: #333;
-  border: 1px solid #ddd;
+  background: #2563eb !important;
 }
 
 .google-btn:hover {
-  background: #f5f5f5;
+  background: #1d4ed8 !important;
 }
 
-.error {
-  color: #e74c3c;
-  margin-top: 10px;
-  font-size: 14px;
+
+.glass-card hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
 }
 
-.glass-card {
-  padding: 40px;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  border: 3px solid #e08bcd;
-  box-shadow: 
-    6px 6px 0px #eb9b8f,
-    12px 12px 0px #e7f675;
-  text-align: center;
-  color: #444;
-}
-input:focus {
-  border-color: #eb9b8f;
-  box-shadow: 0 0 10px rgba(224, 139, 205, 0.4);
-}
+
 .signup-block {
-  margin-top: 20px;
-  margin-left: 0px;
-  font-size: 0.9rem;
-  color: #ffffff;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #6b7280;
+  padding: 6px 0;
 }
+
 .signup-block a {
-  color: #f62b2b;
-  text-decoration: none;
+  color: #ffffff;
   font-weight: 500;
+  text-decoration: none;
 }
+
 .signup-block a:hover {
-  text-decoration: underline; 
-  text-shadow: 0 0 5px rgba(246, 43, 43, 0.5);
+  text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 30px 22px;
+  }
+
+  .glass-card h1 {
+    font-size: 20px;
+  }
 }

@@ -1,0 +1,56 @@
+<div class="product-page" *ngIf="!loading && product">
+
+  <!-- PRODUCT HEADER -->
+  <div class="product-card">
+
+    <div class="image-section">
+      <img *ngIf="product.image" [src]="product.image">
+    </div>
+
+    <div class="info-section">
+
+      <h1>{{ product.name }}</h1>
+
+      <div class="variant">
+        {{ product.weight }}
+      </div>
+
+      <div class="price">
+        MRP ₹ {{ product.mrp }}
+      </div>
+
+      <div class="meta">
+        <span>ID: {{ product.id }}</span>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- AVAILABLE SHOPS -->
+  <div class="shops-section">
+
+    <h2>Available In Shops</h2>
+
+    <div *ngIf="inventory.length === 0" class="empty">
+      Not available in any shop.
+    </div>
+
+   <div class="shop-box" *ngFor="let item of inventory">
+
+  <h3>{{ item.shop_name }}</h3>
+
+  <div class="price-tag">
+    ₹ {{ item.selling_price }}
+  </div>
+
+</div>
+
+  </div>
+
+</div>
+
+<div *ngIf="loading" class="loading">
+  Loading...
+</div>

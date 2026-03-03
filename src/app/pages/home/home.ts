@@ -153,9 +153,7 @@ export class Home implements OnInit {
     this.loadInventoryStats();
   }
 
-  /* ==============================
-   ADD SHOP MODAL METHODS
-================================ */
+
 
 openAddShop() {
   this.showAddShopModal = true;

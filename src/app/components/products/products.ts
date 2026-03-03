@@ -2,11 +2,12 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './products.html',
   styleUrls: ['./products.css']
 })
@@ -31,7 +32,8 @@ export class Products implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -115,41 +117,92 @@ export class Products implements OnInit {
     this.showAddModal = false;
   }
 
-  addToShop() {
+ addToShop() {
 
   if (!this.selectedShopId || 
       this.sellingPrice === null || 
       this.stockCount === null) {
-    alert('Fill all fields');
+
+    this.snackBar.open(
+      'Please fill all fields',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
   if (this.sellingPrice > this.selectedProduct.mrp) {
-    alert('Selling price cannot exceed MRP');
+
+    this.snackBar.open(
+      'Selling price cannot exceed MRP',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
   if (this.sellingPrice < 0 || this.stockCount < 0) {
-    alert('Values must be positive');
+
+    this.snackBar.open(
+      'Values must be positive',
+      'Close',
+      {
+        duration: 3000,
+        panelClass: ['error-snackbar'],
+        verticalPosition: 'top',
+        horizontalPosition: 'right'
+      }
+    );
     return;
   }
 
- const payload = {
-  product_id: this.selectedProduct.id, 
-  shop: this.selectedShopId,
-  selling_price: this.sellingPrice,
-  stock_count: this.stockCount
-};
+  const payload = {
+    product_id: this.selectedProduct.id,
+    shop: this.selectedShopId,
+    selling_price: this.sellingPrice,
+    stock_count: this.stockCount
+  };
 
   this.http.post(`${this.baseUrl}/inventory/`, payload)
     .subscribe({
       next: () => {
-        alert('Product added with stock successfully');
+
+        this.snackBar.open(
+          'Product added successfully',
+          'OK',
+          {
+            duration: 3000,
+            panelClass: ['success-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'right'
+          }
+        );
+
         this.showAddModal = false;
       },
-      error: (err) => {
-        console.error(err);
-        alert('Error adding product');
+      error: () => {
+
+        this.snackBar.open(
+          'Error adding product',
+          'Close',
+          {
+            duration: 4000,
+            panelClass: ['error-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'right'
+          }
+        );
+
       }
     });
 }

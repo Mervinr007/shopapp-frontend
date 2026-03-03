@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -15,7 +17,6 @@ export class Login {
 
   username = '';
   password = '';
-  errorMessage = '';
 
   private baseUrl = 'http://127.0.0.1:8000';
 
@@ -26,34 +27,55 @@ export class Login {
 
   login() {
 
-  this.http.post(
-    `${this.baseUrl}/api/token/`,
-    {
-      username: this.username,
-      password: this.password
+    if (!this.username || !this.password) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please enter username and password'
+      });
+      return;
     }
-  ).subscribe({
-    next: (res: any) => {
 
-      console.log("Login success:", res);
+    this.http.post(
+      `${this.baseUrl}/api/token/`,
+      {
+        username: this.username,
+        password: this.password
+      }
+    ).subscribe({
+      next: (res: any) => {
 
-      localStorage.setItem('accessToken', res.access);
-      localStorage.setItem('refreshToken', res.refresh);
+        localStorage.setItem('accessToken', res.access);
+        localStorage.setItem('refreshToken', res.refresh);
+        localStorage.setItem('username', this.username);
 
-      localStorage.setItem('username', this.username);
+        Swal.fire({
+          icon: 'success',
+          title: 'Welcome Back 👋',
+          text: 'Login Successful',
+          timer: 1000,
+          showConfirmButton: false
+        }).then(() => {
+          this.router.navigate(['/home']);
+        });
 
-      this.router.navigate(['/home']);
-    },
-    error: (err) => {
-      console.error("Login failed:", err);
-      this.errorMessage = "Invalid username or password";
-    }
-  });
-}
+      },
+      error: () => {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: 'Invalid username or password',
+          timer: 1000,
+          confirmButtonText: 'Try Again'
+        });
+
+      }
+    });
+  }
 
   loginWithGoogle() {
     window.location.href =
       'http://localhost:8000/accounts/google/login/';
   }
-  
 }

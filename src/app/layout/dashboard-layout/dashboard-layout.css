@@ -240,7 +240,7 @@
   }
 
   .back-button .text {
-    display: none; /* show only arrow on small screens */
+    display: none; 
   }
 
   .back-button .arrow {
