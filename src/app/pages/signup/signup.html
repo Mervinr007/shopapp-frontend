@@ -22,8 +22,17 @@
         required
       />
 
-      <button class="login-block" type="submit">Sign Up</button>
-       <button>
+      <button (click)="register()" [disabled]="loading" class="signup-btn">
+
+  <span *ngIf="!loading">Sign Up</span>
+
+  <span *ngIf="loading" class="spinner-container">
+    <span class="spinner"></span>
+    Creating account...
+  </span>
+
+</button>
+       <button routerLink="/">
       Already have an account?
 
       <a routerLink="/">Login</a>

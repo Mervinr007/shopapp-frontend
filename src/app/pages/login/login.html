@@ -16,7 +16,15 @@
       [(ngModel)]="password"
     />
 
-    <button (click)="login()">Login</button>
+   <button (click)="login()" [disabled]="loading" class="login-btn">
+
+  <span *ngIf="!loading">Login</span>
+
+  <span *ngIf="loading" class="spinner-container">
+    <span class="spinner"></span>
+    Logging in...
+  </span>
+</button>
 
     
 

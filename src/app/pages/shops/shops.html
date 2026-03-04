@@ -1,20 +1,27 @@
 
 
-<div *ngIf="currentView === 'list'">
+<div *ngIf="currentView === 'list'" class="shops-page">
 
-  <h1>Your Shops</h1>
+  <h1 class="page-title">Your Shops</h1>
 
-  <div class="shop-card"
-       *ngFor="let shop of shops"
-       (click)="enterShop(shop)">
+  <div class="shops-grid">
 
-    <img *ngIf="shop.image"
-         [src]="shop.image"
-         class="shop-img" />
+    <div class="shop-card"
+         *ngFor="let shop of shops"
+         (click)="enterShop(shop)">
 
-    <div class="shop-info">
-      <h3>{{ shop.name }}</h3>
-      <p>{{ shop.address }}</p>
+      <div class="shop-image">
+        <img *ngIf="shop.image" [src]="shop.image">
+      </div>
+
+      <div class="shop-details">
+
+        <h3>{{ shop.name }}</h3>
+
+        <p>{{ shop.address }}</p>
+
+      </div>
+
     </div>
 
   </div>
@@ -52,38 +59,58 @@
 
 
  
-  <div class="products-panel">
+  <div class="products-section">
+
+  <h2>Products</h2>
+
+  <div class="products-grid">
 
     <div class="product-card"
          *ngFor="let item of products">
 
-      <div class="product-left">
+      <div class="product-img">
 
         <img *ngIf="item.product?.image"
-             [src]="item.product.image" />
-
-        <div>
-          <h3>{{ item.product?.name }}</h3>
-          <p>MRP: ₹ {{ item.product?.mrp }}</p>
-          <p>Selling: ₹ {{ item.selling_price }}</p>
-          <P>Weight: {{ item.product?.weight }}</P>
-        </div>
+             [src]="item.product.image">
 
       </div>
 
-      <div class="product-right">
+      <div class="product-info">
 
-        <div class="stock"
-             [class.low]="item.stock_count < 5">
+        <h3>{{ item.product?.name }}</h3>
+
+        <p class="weight">
+          {{ item.product?.weight }}
+        </p>
+
+        <p class="mrp">
+          MRP ₹ {{ item.product?.mrp }}
+        </p>
+
+        <p class="selling">
+          Selling ₹ {{ item.selling_price }}
+        </p>
+
+      </div>
+
+      <div class="product-footer">
+
+        <span class="stock"
+              [class.low]="item.stock_count < 5">
           {{ item.stock_count }}
-        </div>
+        </span>
 
         <div class="actions">
-          <button (click)="openEdit(item)">Edit</button>
+
+          <button (click)="openEdit(item)">
+            Edit
+          </button>
+
           <button class="danger"
                   (click)="deleteItem(item.id)">
             Delete
           </button>
+
         </div>
 
       </div>
@@ -91,6 +118,8 @@
     </div>
 
   </div>
+
+</div>
 
 </div>
 
@@ -169,6 +198,7 @@
 
     <input [(ngModel)]="newProductWeight"
            placeholder="Weight">
+    
 
     <input type="number"
            [(ngModel)]="newSellingPrice"
@@ -177,7 +207,12 @@
     <input type="number"
            [(ngModel)]="newStockCount"
            placeholder="Stock Quantity">
+    
 
+<input
+  type="file"
+  accept="image/*"
+  (change)="onImageSelected($event)">
     <div class="modal-actions">
 
       <button class="primary-btn"
@@ -208,13 +243,31 @@
 
     <h3>Edit Product</h3>
 
-    <input type="number"
-           [(ngModel)]="editSellingPrice"
-           placeholder="Selling Price">
+    <small>
+MRP: ₹ {{ editingItem?.product?.mrp }}
+</small>
 
-    <input type="number"
-           [(ngModel)]="editStockCount"
-           placeholder="Stock Quantity">
+
+   <input type="number"
+       [(ngModel)]="editSellingPrice"
+       placeholder="Selling Price">
+
+<small>
+stock count {{ editingItem?.product?.stock_count }}
+</small>
+<input type="number"
+       [(ngModel)]="editStockCount"
+       placeholder="Stock Quantity">
+
+<input
+  type="file"
+  accept="image/*"
+  (change)="onEditImageSelected($event)">
+
+
+  <img *ngIf="editingItem?.product?.image"
+     [src]="editingItem.product.image"
+     style="width:80px;border-radius:8px;">
 
     <div class="modal-actions">
 

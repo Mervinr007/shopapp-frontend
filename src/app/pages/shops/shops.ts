@@ -33,13 +33,14 @@ export class Shops implements OnInit {
   showAddExistingProductModal = false;
   showAddNewProductModal = false;
   showEditModal = false;
+  newProductImage: File | null = null;
 
   selectedCatalogueProductId: number | null = null;
 
   editingItem: any = null;
   editSellingPrice: number | null = null;
   editStockCount: number | null = null;
-
+  editImage: File | null = null;
   newProductName = '';
   newProductMRP: number | null = null;
   newProductWeight = '';
@@ -88,6 +89,24 @@ export class Shops implements OnInit {
       });
   }
 
+  onEditImageSelected(event: any) {
+
+  const file = event.target.files[0];
+
+  if (file) {
+    this.editImage = file;
+  }
+
+}
+  onImageSelected(event: any) {
+
+  const file = event.target.files[0];
+
+  if (file) {
+    this.newProductImage = file;
+  }
+
+}
 
 
   openAddExistingProduct() {
@@ -271,11 +290,17 @@ get selectedCatalogueProductMRP(): number | null {
     return;
   }
 
-  this.http.post(`${this.baseUrl}/products/`, {
-    name: this.newProductName,
-    mrp: this.newProductMRP,
-    weight: this.newProductWeight
-  }).subscribe({
+  const formData = new FormData();
+
+formData.append('name', this.newProductName);
+formData.append('mrp', this.newProductMRP!.toString());
+formData.append('weight', this.newProductWeight);
+
+if (this.newProductImage) {
+  formData.append('image', this.newProductImage);
+}
+
+this.http.post(`${this.baseUrl}/products/`, formData).subscribe({
     next: (product: any) => {
 
       this.http.post(`${this.baseUrl}/inventory/`, {
@@ -335,25 +360,111 @@ get selectedCatalogueProductMRP(): number | null {
 }
 
   openEdit(item: any) {
-    this.editingItem = item;
-    this.editSellingPrice = item.selling_price;
-    this.editStockCount = item.stock_count;
-    this.showEditModal = true;
-  }
+
+  this.editingItem = item;
+
+  this.editSellingPrice = item.selling_price;
+  this.editStockCount = item.stock_count;
+
+  this.editImage = null;
+
+  this.showEditModal = true;
+
+}
 
   saveEdit() {
 
-    this.http.patch(
-      `${this.baseUrl}/inventory/${this.editingItem.id}/`,
-      {
-        selling_price: this.editSellingPrice,
-        stock_count: this.editStockCount
-      }
-    ).subscribe(() => {
-      this.showEditModal = false;
-      this.loadProducts(this.selectedShop.id);
-    });
+  if (this.editSellingPrice === null || this.editStockCount === null) {
+
+    this.snackBar.open(
+      'Please fill all fields',
+      'Close',
+      { duration: 3000, panelClass: ['error-snackbar'], verticalPosition: 'top', horizontalPosition: 'right' }
+    );
+
+    return;
   }
+
+  const mrp = this.editingItem.product.mrp;
+
+  if (this.editSellingPrice > mrp) {
+
+    this.snackBar.open(
+      'Selling price cannot exceed MRP',
+      'Close',
+      { duration: 3000, panelClass: ['error-snackbar'], verticalPosition: 'top', horizontalPosition: 'right' }
+    );
+
+    return;
+  }
+
+  if (this.editSellingPrice < 0 || this.editStockCount < 0) {
+
+    this.snackBar.open(
+      'Values must be positive',
+      'Close',
+      { duration: 3000, panelClass: ['error-snackbar'], verticalPosition: 'top', horizontalPosition: 'right' }
+    );
+
+    return;
+  }
+
+
+  /* UPDATE INVENTORY */
+
+  this.http.patch(
+    `${this.baseUrl}/inventory/${this.editingItem.id}/`,
+    {
+      selling_price: this.editSellingPrice,
+      stock_count: this.editStockCount
+    }
+  ).subscribe({
+    next: () => {
+
+      /* UPDATE PRODUCT IMAGE (optional) */
+
+      if (this.editImage) {
+
+        const formData = new FormData();
+        formData.append('image', this.editImage);
+
+        this.http.patch(
+          `${this.baseUrl}/products/${this.editingItem.product.id}/`,
+          formData
+        ).subscribe(() => {
+
+          this.finishEdit();
+
+        });
+
+      } else {
+
+        this.finishEdit();
+
+      }
+
+    }
+  });
+
+}
+finishEdit() {
+
+  this.snackBar.open(
+    'Product updated successfully',
+    'OK',
+    {
+      duration: 3000,
+      panelClass: ['success-snackbar'],
+      verticalPosition: 'top',
+      horizontalPosition: 'right'
+    }
+  );
+
+  this.showEditModal = false;
+
+  this.loadProducts(this.selectedShop.id);
+
+}
 
 
  deleteItem(id: number) {

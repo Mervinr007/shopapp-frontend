@@ -23,6 +23,7 @@ export class Products implements OnInit {
   selectedProduct: any = null;
   selectedShopId: number | null = null;
   sellingPrice: number | null = null;
+  
   stockCount: number | null = null;
   currentPage = 1;
   itemsPerPage = 8;
@@ -102,7 +103,7 @@ export class Products implements OnInit {
       this.currentPage++;
     }
   }
-
+  
  
 
   openAddToShop(product: any) {

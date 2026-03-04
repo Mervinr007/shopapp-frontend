@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -17,64 +18,77 @@ export class Login {
 
   username = '';
   password = '';
+  loading = false;
 
   private baseUrl = 'http://127.0.0.1:8000';
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   login() {
 
-    if (!this.username || !this.password) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Fields',
-        text: 'Please enter username and password'
-      });
-      return;
-    }
+  if (this.loading) return;
 
-    this.http.post(
-      `${this.baseUrl}/api/token/`,
-      {
-        username: this.username,
-        password: this.password
-      }
-    ).subscribe({
-      next: (res: any) => {
-
-        localStorage.setItem('accessToken', res.access);
-        localStorage.setItem('refreshToken', res.refresh);
-        localStorage.setItem('username', this.username);
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Welcome Back 👋',
-          text: 'Login Successful',
-          timer: 1000,
-          showConfirmButton: false
-        }).then(() => {
-          this.router.navigate(['/home']);
-        });
-
-      },
-      error: () => {
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Login Failed',
-          text: 'Invalid username or password',
-          timer: 1000,
-          confirmButtonText: 'Try Again'
-        });
-
-      }
+  if (!this.username || !this.password) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Missing Fields',
+      text: 'Please enter username and password'
     });
+    return;
   }
 
+  this.loading = true;
+
+  this.http.post(
+    `${this.baseUrl}/api/token/`,
+    {
+      username: this.username,
+      password: this.password
+    }
+  ).subscribe({
+    next: (res: any) => {
+
+      localStorage.setItem('accessToken', res.access);
+      localStorage.setItem('refreshToken', res.refresh);
+      localStorage.setItem('username', this.username);
+
+      this.loading = false;
+      this.cdr.detectChanges();
+
+      Swal.fire({
+        icon: 'success',
+        title: `Welcome Back ${this.username}!`,
+        text: 'Login Successful',
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => {
+        this.router.navigate(['/home']);
+      });
+
+    },
+    error: () => {
+
+      this.loading = false;
+      this.cdr.detectChanges();
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: 'Invalid username or password',
+        timer: 1500,
+        confirmButtonText: 'Try Again'
+      });
+
+    }
+  });
+}
+
   loginWithGoogle() {
+
     window.location.href =
       'http://localhost:8000/accounts/google/login/';
   }
