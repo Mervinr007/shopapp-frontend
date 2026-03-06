@@ -1,36 +1,41 @@
 <div class="products-page" *ngIf="!loading">
 
+  
   <div class="home-banner">
-    <h1>Products</h1>
-    <p>all products</p>
+    <div>
+      <h1>Products</h1>
+     
+    </div>
+    <div class="banner-icon">📦</div>
   </div>
 
-  <table class="products-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>MRP</th>
-        <th>Weight</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    
-    <tbody>
-      <tr *ngFor="let product of paginatedProducts">
-        <td>{{ product.id }}</td>
-        <td>{{ product.name }}</td>
-        <td>₹ {{ product.mrp }}</td>
-        <td>{{ product.weight }}</td>
-        <td>
-          <button class="primary-btn"
-                  (click)="openAddToShop(product)">
-            Add To Shop
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div class="table-wrapper">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>MRP</th>
+          <th>Weight</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of paginatedProducts">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>₹ {{ product.mrp }}</td>
+          <td>{{ product.weight }}</td>
+          <td>
+            <button class="primary-btn" (click)="openAddToShop(product)">
+              Add To Shop
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   
   <div class="pagination" *ngIf="totalPages.length > 1">
@@ -38,7 +43,7 @@
     <div class="nav-btn"
          [class.disabled]="currentPage === 1"
          (click)="prevPage()">
-      Previous
+      ← Previous
     </div>
 
     <div class="page-box"
@@ -51,7 +56,7 @@
     <div class="nav-btn"
          [class.disabled]="currentPage === totalPages.length"
          (click)="nextPage()">
-      Next
+      Next →
     </div>
 
   </div>
@@ -59,22 +64,17 @@
 </div>
 
 
-
-<div class="modal-overlay"
-     *ngIf="showAddModal"
-     (click)="closeAddModal()">
-
-  <div class="modal-box"
-       (click)="$event.stopPropagation()">
-
+<div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+  
+  <div class="modal-box" (click)="$event.stopPropagation()">
+ <button class="modal-close" (click)="closeAddModal()">✕</button>
     <h2>Add {{ selectedProduct?.name }} to Shop</h2>
 
     <div class="modal-grid">
 
       <select [(ngModel)]="selectedShopId">
         <option [ngValue]="null">Select Shop</option>
-        <option *ngFor="let shop of shopList"
-                [ngValue]="shop.id">
+        <option *ngFor="let shop of shopList" [ngValue]="shop.id">
           {{ shop.name }}
         </option>
       </select>
@@ -83,30 +83,18 @@
              [(ngModel)]="sellingPrice"
              placeholder="Selling Price" />
 
-      <small *ngIf="selectedProduct">
-        MRP: ₹ {{ selectedProduct.mrp }}
-      </small>
+      <small *ngIf="selectedProduct">MRP: ₹ {{ selectedProduct.mrp }}</small>
 
       <input type="number"
-       [(ngModel)]="stockCount"
-       placeholder="Stock Quantity" />
+             [(ngModel)]="stockCount"
+             placeholder="Stock Quantity" />
 
     </div>
 
     <div class="modal-actions">
-
-      <button class="primary-btn"
-              (click)="addToShop()">
-        Add
-      </button>
-
-      <button class="cancel-btn"
-              (click)="closeAddModal()">
-        Cancel
-      </button>
-
+      <button class="cancel-btn" (click)="closeAddModal()">Cancel</button>
+      <button class="primary-btn" (click)="addToShop()">Add to Shop</button>
     </div>
 
   </div>
-
 </div>

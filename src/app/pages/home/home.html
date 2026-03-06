@@ -1,137 +1,94 @@
+
 <div class="home-page" *ngIf="!loading">
 
   <div class="home-banner">
     <div>
-      <h1>Home</h1>
-      <p>Welcome back, {{ auth.getUsername() }}</p>
+      <h1>Dashboard</h1>
+      <p>Welcome back, <strong>{{ auth.getUsername() }}</strong></p>
+    </div>
+    <div class="banner-icon">🛍️</div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>{{ selectedShopId ? 'Owner' : 'Total Shops' }}</h3>
+      <span class="stat-number">{{ selectedShopId ? ownerName : totalShops }}</span>
+    </div>
+    <div class="stat-card">
+      <h3>Total Products</h3>
+      <span class="stat-number">{{ totalProducts }}</span>
+    </div>
+    <div class="stat-card warning">
+      <h3>Low Stock</h3>
+      <span class="stat-number">{{ lowStockCount }}</span>
+    </div>
+    <div class="stat-card">
+      <h3>Total Inventory Value</h3>
+      <span class="stat-number">₹ {{ totalValue }}</span>
     </div>
   </div>
 
-
- <div class="stats-grid">
-
-  
-  <div class="stat-card">
-    <h3>
-      {{ selectedShopId ? 'Owner' : 'Total Shops' }}
-    </h3>
-
-    <span class="stat-number">
-      {{ selectedShopId ? ownerName : totalShops }}
-    </span>
-  </div>
-
-
-  <div class="stat-card">
-    <h3>Total Products</h3>
-    <span class="stat-number">{{ totalProducts }}</span>
-  </div>
-
-  <div class="stat-card warning">
-    <h3>Low Stock</h3>
-    <span class="stat-number">{{ lowStockCount }}</span>
-  </div>
-
-  <div class="stat-card">
-    <h3>Total Inventory Value</h3>
-    <span class="stat-number">₹ {{ totalValue }}</span>
-  </div>
-
-</div>
-<div class="modal-overlay"
-     *ngIf="showAddShopModal"
-     (click)="closeAddShop()">
-
-  <div class="modal-box"
-       (click)="$event.stopPropagation()">
-
-    <h2>Add New Shop</h2>
-
-    <div class="modal-grid">
-
-      <input type="text"
-             [(ngModel)]="shopForm.name"
-             placeholder="Shop Name" />
-
-      <input type="text"
-             [(ngModel)]="shopForm.description"
-             placeholder="Description" />
-
-      <input type="text"
-             [(ngModel)]="shopForm.address"
-              placeholder="Address" />
-
-      <input type="file"
-             (change)="onFileChange($event)" />
-
+  <div class="modal-overlay" *ngIf="showAddShopModal" (click)="closeAddShop()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeAddShop()">✕</button>
+      <h2>Add New Shop</h2>
+      <div class="modal-grid">
+        <input type="text" [(ngModel)]="shopForm.name"        placeholder="Shop Name" />
+        <input type="text" [(ngModel)]="shopForm.description" placeholder="Description" />
+        <input type="text" [(ngModel)]="shopForm.address"     placeholder="Address" />
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
+      <div class="modal-actions">
+        <button class="cancel-btn" (click)="closeAddShop()">Cancel</button>
+        <button class="primary-btn" (click)="saveShop()">Save Shop</button>
+      </div>
     </div>
-
-    <div class="modal-actions">
-      <button class="primary-btn"
-              (click)="saveShop()">
-        Save
-      </button>
-
-      <button class="cancel-btn"
-              (click)="closeAddShop()">
-        Cancel
-      </button>
-    </div>
-
   </div>
-
-</div>
 
   <div class="dashboard-lower">
 
     <div class="low-stock-panel">
-
       <h2>Low Stock Items</h2>
-
       <div *ngIf="lowStockProducts.length === 0" class="empty">
         All products are sufficiently stocked 🎉
       </div>
-
-    <div *ngFor="let item of lowStockProducts"
-     class="low-stock-card">
-
-  <span>{{ item.product?.name }}</span>
-  <span class="stock-danger">{{ item.stock_count }}</span>
-
-</div>
-
+      <div *ngFor="let item of lowStockProducts" class="low-stock-card">
+        <span>{{ item.product?.name }}</span>
+        <span class="stock-danger">{{ item.stock_count }}</span>
+      </div>
     </div>
 
     <div class="quick-actions">
-
       <h2>Actions</h2>
 
-     
+      <button (click)="openAddShop()">+ Add New Shop</button>
 
-     <button (click)="openAddShop()">
-  Add New Shop
-</button>
-<div class="shop-filter">
-  <h3>Select Shop</h3>
+      <div class="shop-filter">
+        <h3>Select Shop</h3>
+        <div class="custom-select">
 
-  <div class="custom-select">
-  <div class="select-selected" (click)="toggleDropdown()">
-    {{ selectedShopName || 'All Shops' }}
-  </div>
+          <div class="select-selected"
+               #dropdownTrigger
+               (click)="toggleDropdown()">
+            {{ selectedShopName || 'All Shops' }}
+          </div>
 
-  <div class="select-items" *ngIf="dropdownOpen">
-    <div (click)="selectShop(null)">All Shops</div>
-    <div *ngFor="let shop of shopList"
-         (click)="selectShop(shop)">
-      {{ shop.name }}
+         
+          <div class="select-items"
+               *ngIf="dropdownOpen"
+               [style.top.px]="dropdownTrigger.getBoundingClientRect().bottom + 6"
+               [style.left.px]="dropdownTrigger.getBoundingClientRect().left"
+               [style.width.px]="dropdownTrigger.getBoundingClientRect().width">
+            <div (click)="selectShop(null)">All Shops</div>
+            <div *ngFor="let shop of shopList" (click)="selectShop(shop)">
+              {{ shop.name }}
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-</div>
-    
-    </div>
 
   </div>
 
 </div>
-

@@ -1,47 +1,53 @@
 <div class="login-container">
 
+  <div class="bg-glow"></div>
+
   <div class="glass-card">
 
+    <div class="brand-icon">✨</div>
+
     <h1>Create Account</h1>
+    <p class="subtitle">Join ShopApp and start managing your shops</p>
 
     <form (ngSubmit)="register()">
 
-      <input
-        type="text"
-        placeholder="Username"
-        [(ngModel)]="username"
-        name="username"
-        required
-      />
+      <div class="input-group">
+        <span class="input-icon">👤</span>
+        <input
+          type="text"
+          placeholder="Username"
+          [(ngModel)]="username"
+          name="username"
+          required
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
+      <div class="input-group">
+        <span class="input-icon">🔒</span>
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
 
       <button (click)="register()" [disabled]="loading" class="signup-btn">
+        <span *ngIf="!loading">Create Account</span>
+        <span *ngIf="loading" class="spinner-container">
+          <span class="spinner"></span>
+          Creating account...
+        </span>
+      </button>
 
-  <span *ngIf="!loading">Sign Up</span>
-
-  <span *ngIf="loading" class="spinner-container">
-    <span class="spinner"></span>
-    Creating account...
-  </span>
-
-</button>
-       <button routerLink="/">
-      Already have an account?
-
-      <a routerLink="/">Login</a>
-   
-   </button>
+      <button class="login-block">
+        Already have an account?
+        <a routerLink="/">Login</a>
+      </button>
 
     </form>
 
-   
   </div>
 
 </div>

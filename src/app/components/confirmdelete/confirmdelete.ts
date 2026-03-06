@@ -36,7 +36,13 @@ import { CommonModule } from '@angular/common';
       padding: 8px 14px;
       border-radius: 6px;
       cursor: pointer;
+       transition: background 0.3s ease;
     }
+      .cancel:hover {
+        background: #d1d5db;
+        transform: scale(1.02);
+        transition: background 0.3s ease;
+      }
     .delete {
       background: #dc2626;
       color: white;
@@ -44,7 +50,14 @@ import { CommonModule } from '@angular/common';
       padding: 8px 14px;
       border-radius: 6px;
       cursor: pointer;
+       transition: background 0.3s ease;
     }
+      .delete:hover {
+        background: #b91c1c;
+        
+        transform: scale(1.02);
+        transition: background 0.3s ease;
+      }
   `]
 })
 export class ConfirmDeleteDialog {

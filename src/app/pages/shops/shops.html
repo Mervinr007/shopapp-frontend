@@ -133,7 +133,7 @@
 
   <div class="modal-box"
        (click)="$event.stopPropagation()">
-
+       <button class="modal-close" (click)="showAddExistingProductModal=false">✕</button>
     <h3>Add Product From Catalogue</h3>
 
     <select [(ngModel)]="selectedCatalogueProductId">
@@ -186,6 +186,7 @@
 
   <div class="modal-box"
        (click)="$event.stopPropagation()">
+              <button class="modal-close" (click)="showAddNewProductModal=false">✕</button>
 
     <h3>Add New Product</h3>
 
@@ -240,6 +241,7 @@
 
   <div class="modal-box"
        (click)="$event.stopPropagation()">
+       <button class="modal-close" (click)="showEditModal=false">✕</button>
 
     <h3>Edit Product</h3>
 

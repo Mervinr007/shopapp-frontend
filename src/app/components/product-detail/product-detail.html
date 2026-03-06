@@ -1,56 +1,98 @@
+
+<div *ngIf="loading" class="loading-screen">
+  <div class="spinner"></div>
+  <span>Loading product...</span>
+</div>
+
+
 <div class="product-page" *ngIf="!loading && product">
 
-  <!-- PRODUCT HEADER -->
+
+  <div class="breadcrumb">
+    <span>Products</span>
+    <span class="sep">/</span>
+    <span>{{ product.name }}</span>
+  </div>
+
   <div class="product-card">
 
     <div class="image-section">
-      <img *ngIf="product.image" [src]="product.image">
+      <div class="id-badge"># {{ product.id }}</div>
+      <div class="image-wrapper">
+        <img *ngIf="product.image" [src]="product.image" [alt]="product.name">
+        <div *ngIf="!product.image" class="no-image">📦</div>
+      </div>
     </div>
 
+    <!-- INFO -->
     <div class="info-section">
+
+      <div class="product-label">Product Detail</div>
 
       <h1>{{ product.name }}</h1>
 
-      <div class="variant">
-        {{ product.weight }}
+      <div class="variant-tag">{{ product.weight }}</div>
+
+      <div class="divider"></div>
+
+      <div class="price-row">
+        <div>
+          <div class="mrp-label">MRP</div>
+          <div class="mrp-value">₹{{ product.mrp }}</div>
+        </div>
       </div>
 
-      <div class="price">
-        MRP ₹ {{ product.mrp }}
-      </div>
-
-      <div class="meta">
-        <span>ID: {{ product.id }}</span>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-label">Available In</div>
+          <div class="stat-value">{{ inventory.length }} Shops</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Product ID</div>
+          <div class="stat-value">#{{ product.id }}</div>
+        </div>
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- AVAILABLE SHOPS -->
+ 
   <div class="shops-section">
 
-    <h2>Available In Shops</h2>
-
-    <div *ngIf="inventory.length === 0" class="empty">
-      Not available in any shop.
+    <div class="section-header">
+      <h2>Available In Shops</h2>
+      <span class="shop-count">{{ inventory.length }} locations</span>
     </div>
 
-   <div class="shop-box" *ngFor="let item of inventory">
+    <div *ngIf="inventory.length === 0" class="empty-state">
+      <div class="empty-icon">🏪</div>
+      <div>Not available in any shop yet.</div>
+    </div>
 
-  <h3>{{ item.shop_name }}</h3>
+    <div class="shops-grid" *ngIf="inventory.length > 0">
+      <div class="shop-box" *ngFor="let item of inventory">
 
-  <div class="price-tag">
-    ₹ {{ item.selling_price }}
+        <div class="shop-icon">🏪</div>
+
+        <div class="shop-name">{{ item.shop_name }}</div>
+
+        <div class="shop-meta">
+          <div class="shop-price">
+            ₹{{ item.selling_price }}
+            <span>/ unit</span>
+          </div>
+          <span
+            class="stock-badge"
+            [class.stock-ok]="item.stock_count >= 5"
+            [class.stock-low]="item.stock_count < 5">
+            {{ item.stock_count < 5 ? 'Low Stock' : 'In Stock' }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
-</div>
-
-  </div>
-
-</div>
-
-<div *ngIf="loading" class="loading">
-  Loading...
 </div>

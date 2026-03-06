@@ -5,6 +5,7 @@ import { Auth } from '../../services/auth';
 import { forkJoin } from 'rxjs';
 import { ShopService } from '../../services/shop';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -47,10 +48,23 @@ export class Home implements OnInit {
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
     public auth: Auth,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+    const token = params['access'];
+    const refresh = params['refresh'];
+
+    if (token) {
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refresh);
+      this.router.navigate(['/home']);
+    }
+  });
     this.loadDashboardData();
   }
 

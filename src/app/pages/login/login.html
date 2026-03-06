@@ -1,44 +1,51 @@
 <div class="login-container">
 
+  <div class="bg-glow"></div>
+
   <div class="glass-card">
 
-    <h1>Welcome to ShopApp</h1>
+    <div class="brand-icon">🛍️</div>
 
-    <input
-      type="text"
-      placeholder="Username"
-      [(ngModel)]="username"
-    />
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Sign in to your ShopApp account</p>
 
-    <input
-      type="password"
-      placeholder="Password"
-      [(ngModel)]="password"
-    />
+    <div class="input-group">
+      <span class="input-icon">👤</span>
+      <input
+        type="text"
+        placeholder="Username"
+        [(ngModel)]="username"
+      />
+    </div>
 
-   <button (click)="login()" [disabled]="loading" class="login-btn">
+    <div class="input-group">
+      <span class="input-icon">🔒</span>
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="password"
+      />
+    </div>
 
-  <span *ngIf="!loading">Login</span>
-
-  <span *ngIf="loading" class="spinner-container">
-    <span class="spinner"></span>
-    Logging in...
-  </span>
-</button>
-
-    
+    <button (click)="login()" [disabled]="loading" class="login-btn">
+      <span *ngIf="!loading">Login</span>
+      <span *ngIf="loading" class="spinner-container">
+        <span class="spinner"></span>
+        Logging in...
+      </span>
+    </button>
 
     <hr>
 
     <button (click)="loginWithGoogle()" class="google-btn">
-      Login with Google
+      Continue with Google
     </button>
-   
-     <button class="signup-block">
-  Don't have an account?
-  <a routerLink="/signup">Sign up</a>
-     </button>
+
+    <button class="signup-block">
+      Don't have an account?
+      <a routerLink="/signup">Sign up</a>
+    </button>
 
   </div>
- 
+
 </div>

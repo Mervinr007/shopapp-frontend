@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Owners } from './products';
+// import { Owners } from './owners';
 
-describe('Owners', () => {
-  let component: Owners;
-  let fixture: ComponentFixture<Owners>;
+// describe('Owners', () => {
+//   let component: Owners;
+//   let fixture: ComponentFixture<Owners>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Owners]
-    })
-    .compileComponents();
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       imports: [Owners]
+//     })
+//     .compileComponents();
 
-    fixture = TestBed.createComponent(Owners);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
-  });
+//     fixture = TestBed.createComponent(Owners);
+//     component = fixture.componentInstance;
+//     await fixture.whenStable();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

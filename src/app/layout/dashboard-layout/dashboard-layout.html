@@ -1,42 +1,50 @@
+
 <div class="dashboard-container">
 
-  
+
   <div class="sidebar" [class.closed]="isSidebarClosed">
-     
+
     <div class="profile-section">
-      <!-- <img src="assets/avatar.png" class="avatar"> -->
-      <h3 class="text">{{ username }}</h3>
+      <div class="avatar-circle">{{ username?.charAt(0)?.toUpperCase() }}</div>
+      <div class="profile-info">
+        <h3>{{ username }}</h3>
+        <span>Shop Owner</span>
+      </div>
     </div>
-   <div class="back-button" (click)="goToHome()">
-  <span class="arrow">←</span>
-  <span class="text">HOME</span>
-</div>
+
+    <div class="home-btn" (click)="goToHome()">
+      <span class="material-icons icon">home</span>
+      <span class="text">Home</span>
+    </div>
+
+   
     <div class="menu-section">
-      <h4 class="text">Categories</h4>
-      <ul style="list-style: none; padding: 0;">
-      <li (click)="goToProducts()">
-         
+      <h4 class="text">Navigation</h4>
+      <ul>
+        <li (click)="goToProducts()">
           <span class="material-icons icon">inventory_2</span>
           <span class="text">Products</span>
-        </li><br>
-         <li (click)="goBackToShops()">
+        </li>
+        <li (click)="goBackToShops()">
           <span class="material-icons icon">storefront</span>
           <span class="text">Shops</span>
-        </li><br>
+        </li>
         <li (click)="goToSearch()">
           <span class="material-icons icon">search</span>
           <span class="text">Search</span>
-        </li></ul>
+        </li>
+      </ul>
     </div>
 
-    
+    <div class="nav-divider"></div>
+
+
     <div class="bottom-section">
       <button (click)="goToChangePass()">
         <span class="material-icons icon">lock_reset</span>
         <span class="text">Reset Password</span>
       </button>
-
-      <button (click)="logout()">
+      <button class="logout-btn" (click)="logout()">
         <span class="material-icons icon">logout</span>
         <span class="text">Logout</span>
       </button>
@@ -45,11 +53,8 @@
   </div>
 
   <div class="content">
-
     <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
-
     <router-outlet></router-outlet>
-
   </div>
 
 </div>

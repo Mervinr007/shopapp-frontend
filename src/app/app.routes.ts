@@ -9,11 +9,13 @@ import { authGuard } from './guard/auth.guard';
 import { Products } from './components/products/products';
 import { ProductDetail } from './components/product-detail/product-detail';
 import { Search } from './components/search/search';
+import { OauthCallback } from './pages/oauth-callback/oauth-callback';
 export const routes: Routes = [
 
  
   { path: 'login', component: Login },
   { path: 'signup', component: Signup },
+  { path: 'oauth/callback', component: OauthCallback },
 
   {
     path: '',
